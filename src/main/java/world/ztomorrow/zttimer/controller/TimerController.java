@@ -5,18 +5,21 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import world.ztomorrow.zttimer.common.ResponseEntity;
 import world.ztomorrow.zttimer.domain.dto.TimerDTO;
+import world.ztomorrow.zttimer.service.TimerService;
 
 @RestController
 @RequestMapping("/xtimer")
 @RequiredArgsConstructor
 public class TimerController {
 
+    private final TimerService timerService;
+
     /**
      * 创建定时任务
      */
     @PostMapping(value = "/createTimer")
     public ResponseEntity<Long> createTimer(@RequestBody TimerDTO timerDTO) {
-        return ResponseEntity.ok();
+        return ResponseEntity.ok(timerService.createTimer(timerDTO));
     }
 
     /**
