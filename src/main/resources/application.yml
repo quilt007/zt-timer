@@ -42,3 +42,12 @@ migrator:
   migrateTryLockMinutes: 1
   migrateSuccessExpireMinutes: 1
   timerDetailCacheMinutes: 2
+
+trigger:
+  zrangeGapSeconds: 1
+  workersNum: 10000
+  pool:
+    corePoolSize: 100
+    maxPoolSize: 100
+    queueCapacity: 99999
+    namePrefix: trigger-

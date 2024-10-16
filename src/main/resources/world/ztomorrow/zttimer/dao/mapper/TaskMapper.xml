@@ -23,4 +23,19 @@
                 #{taskModel.costTime},#{taskModel.status})
             </foreach>
     </insert>
+
+    <select id="getTasksByTimeRange" resultMap="taskMap">
+        select * from timer_task
+        <where>
+            <if test="startTime != null">
+                AND `run_timer` <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND `run_timer` <![CDATA[<=]]> #{endTime}
+            </if>
+            <if test="taskStatus != null">
+                AND `status` = #{taskStatus}
+            </if>
+        </where>
+    </select>
 </mapper>

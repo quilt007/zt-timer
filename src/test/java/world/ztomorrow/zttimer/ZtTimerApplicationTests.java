@@ -2,14 +2,14 @@ package world.ztomorrow.zttimer;
 
 import org.junit.jupiter.api.Test;
 import org.quartz.CronExpression;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-@SpringBootTest
+//@SpringBootTest
 class ZtTimerApplicationTests {
 
     @Test
@@ -21,4 +21,13 @@ class ZtTimerApplicationTests {
         System.out.println(LocalDateTime.ofInstant(next.toInstant(), ZoneId.systemDefault()));
     }
 
+    @Test
+    void test() {
+        Date now = new Date();
+        Date nowPreMin = new Date(now.getTime() - 60000);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String timeStr = sdf.format(nowPreMin);
+        System.out.println(LocalDateTime.now());
+        System.out.println(timeStr);
+    }
 }
