@@ -8,4 +8,8 @@ import world.ztomorrow.zttimer.dao.po.TimerModel;
 public interface TimerMapper {
 
     void save(@Param("timerModel") TimerModel timerModel);
+
+    TimerModel selectById(@Param("timerId") Long timerId);
+
+    void update(@Param("timerModel") TimerModel timerModel);
 }

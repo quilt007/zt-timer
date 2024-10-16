@@ -15,7 +15,7 @@ public class TimerController {
     private final TimerService timerService;
 
     /**
-     * 创建定时任务
+     * 创建定时器
      */
     @PostMapping(value = "/createTimer")
     public ResponseEntity<Long> createTimer(@RequestBody TimerDTO timerDTO) {
@@ -23,13 +23,13 @@ public class TimerController {
     }
 
     /**
-     * 激活定时服务
+     * 激活定时器
      */
     @GetMapping(value = "/enableTimer")
     public ResponseEntity<String> enableTimer(@RequestParam(value = "app") String app,
                                               @RequestParam(value = "timerId") Long timerId,
                                               @RequestHeader MultiValueMap<String, String> headers){
+        timerService.enableTimer(app, timerId);
         return ResponseEntity.ok();
-
     }
 }
