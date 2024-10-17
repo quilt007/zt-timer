@@ -15,7 +15,7 @@ public interface TimerMapper {
 
     void update(@Param("timerModel") TimerModel timerModel);
 
-    TimerModel getTimerById(@Param("timerModel") Long timerId);
+    TimerModel getTimerById(@Param("timerId") Long timerId);
 
     List<TimerModel> getTimersByStatus(@Param("status") int status);
 }

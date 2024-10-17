@@ -1,6 +1,7 @@
 package world.ztomorrow.zttimer.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
@@ -39,6 +40,7 @@ public class TimerServiceImpl implements TimerService {
         if (timerModel == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        timerModel.setNotifyHTTPParam(JSONUtil.toJsonStr(timerDTO.getNotifyHTTPParam()));
         // 定时器录入数据库
         timerMapper.save(timerModel);
 

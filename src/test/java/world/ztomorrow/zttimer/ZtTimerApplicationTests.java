@@ -23,11 +23,14 @@ class ZtTimerApplicationTests {
 
     @Test
     void test() {
-        Date now = new Date();
-        Date nowPreMin = new Date(now.getTime() - 60000);
+
+        Date nowPreMin = new Date(1729167340000L);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String timeStr = sdf.format(nowPreMin);
-        System.out.println(LocalDateTime.now());
         System.out.println(timeStr);
+    }
+
+    @Test
+    void test2() {
     }
 }

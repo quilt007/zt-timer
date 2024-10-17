@@ -1,6 +1,5 @@
 package world.ztomorrow.zttimer.service.executor;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +35,10 @@ public class ExecutorWorker {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "splitTimerIDUnix 错误");
         }
         TaskModel task = taskMapper.getTasksByTimerIdUnix(timerId, runTimer);
+        if (task == null) {
+            log.warn("执行不存在任务： timerId{}", timerId);
+            return;
+        }
         if (task.getStatus() != TaskStatus.NotRun.getStatus()) {
             log.warn("重复执行任务： timerId{},runTimer:{}", timerId, runTimer);
             return;
@@ -85,8 +88,13 @@ public class ExecutorWorker {
     }
 
     private ResponseEntity<String> executeTimerCallBack(TimerModel timerModel) {
-        TimerDTO timerDTO = BeanUtil.copyProperties(timerModel, TimerDTO.class);
-        NotifyHTTPParam httpParam = JSONUtil.toBean(timerModel.getNotifyHTTPParam(),NotifyHTTPParam.class);
+        TimerDTO timerDTO = new TimerDTO();
+        timerDTO.setApp(timerModel.getApp());
+        timerDTO.setTimerId(timerModel.getTimerId());
+        timerDTO.setName(timerModel.getName());
+        timerDTO.setStatus(timerModel.getStatus());
+        timerDTO.setCron(timerModel.getCron());
+        NotifyHTTPParam httpParam = JSONUtil.toBean(timerModel.getNotifyHTTPParam(), NotifyHTTPParam.class);
         timerDTO.setNotifyHTTPParam(httpParam);
 
         RestTemplate restTemplate = new RestTemplate();

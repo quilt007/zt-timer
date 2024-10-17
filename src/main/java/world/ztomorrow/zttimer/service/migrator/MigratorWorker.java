@@ -32,7 +32,7 @@ public class MigratorWorker {
 
     private final RedisManager redisManager;
 
-    @Scheduled(fixedRate = 10 * 1000) // 60*60*1000 一小时执行一次
+    @Scheduled(fixedRate = 60* 60 * 1000) // 60*60*1000 一小时执行一次
     public void work() {
         log.info("开始迁移时间：{}", LocalDateTime.now());
         Date startHour = getStartHour(new Date());

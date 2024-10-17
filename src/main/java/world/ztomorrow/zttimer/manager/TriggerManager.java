@@ -58,7 +58,7 @@ public class TriggerManager extends TimerTask {
         }
 
         try {
-            this.handleBatch(start, startTime.plusSeconds((triggerAppConf.getZrangeGapSeconds())));
+            this.handleBatch(start, start.plusSeconds((triggerAppConf.getZrangeGapSeconds())));
         } catch (Exception e) {
             log.error("handleBatch Error. minuteBucketKey{},tStartTime:{},e:", minuteBucketKey, startTime, e);
         }
@@ -66,7 +66,6 @@ public class TriggerManager extends TimerTask {
     }
 
     private void handleBatch(LocalDateTime start, LocalDateTime end) {
-        //
         List<TaskModel> tasks = getTasksByTime(start, end);
         if (CollectionUtils.isEmpty(tasks)) {
             return;

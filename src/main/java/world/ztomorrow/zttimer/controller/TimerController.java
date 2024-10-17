@@ -1,12 +1,14 @@
 package world.ztomorrow.zttimer.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import world.ztomorrow.zttimer.common.ResponseEntity;
 import world.ztomorrow.zttimer.domain.dto.TimerDTO;
 import world.ztomorrow.zttimer.service.TimerService;
 
+@Slf4j
 @RestController
 @RequestMapping("/xtimer")
 @RequiredArgsConstructor
@@ -31,5 +33,14 @@ public class TimerController {
                                               @RequestHeader MultiValueMap<String, String> headers){
         timerService.enableTimer(app, timerId);
         return ResponseEntity.ok();
+    }
+
+    @PostMapping("/callback")
+    public ResponseEntity<String> callback(@RequestBody String callbackInfo) {
+        log.info("CALLBACK:"+callbackInfo);
+        // 消息队列发送消息
+        return ResponseEntity.ok(
+                "ok"
+        );
     }
 }

@@ -14,5 +14,5 @@ public interface TaskMapper {
 
     TaskModel getTasksByTimerIdUnix(@Param("timerId") Long timerId, @Param("runTimer") Long runTimer);
 
-    void update(TaskModel taskModel);
+    void update(@Param("taskModel") TaskModel taskModel);
 }
