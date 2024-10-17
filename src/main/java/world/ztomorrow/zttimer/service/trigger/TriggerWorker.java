@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import world.ztomorrow.zttimer.common.conf.TriggerAppConf;
 import world.ztomorrow.zttimer.dao.mapper.TaskMapper;
+import world.ztomorrow.zttimer.manager.RedisManager;
 import world.ztomorrow.zttimer.manager.TriggerManager;
 import world.ztomorrow.zttimer.utils.TimeUtils;
 
@@ -18,6 +19,8 @@ import java.util.concurrent.CountDownLatch;
 @AllArgsConstructor
 public class TriggerWorker {
 
+    private final TriggerPoolTask triggerPoolTask;
+    private final RedisManager redisManager;
     private final TriggerAppConf triggerAppConf;
     private final TaskMapper taskMapper;
 
@@ -28,7 +31,9 @@ public class TriggerWorker {
         CountDownLatch latch = new CountDownLatch(1);
         Timer timer = new Timer();
         TriggerManager task = new TriggerManager(
-                triggerAppConf, taskMapper, startMinute, endMinute, latch, minuteBucketKey
+                triggerAppConf, triggerPoolTask,
+                redisManager, taskMapper,
+                latch, startMinute, endMinute, minuteBucketKey
         );
         timer.scheduleAtFixedRate(task, 0L, triggerAppConf.getZrangeGapSeconds() * 1000L);
 

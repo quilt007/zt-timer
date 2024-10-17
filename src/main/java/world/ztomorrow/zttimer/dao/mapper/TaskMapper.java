@@ -10,5 +10,9 @@ import java.util.List;
 public interface TaskMapper {
     void batchSave(@Param("taskList") List<TaskModel> taskList);
 
-    List<TaskModel> getTasksByTimeRange(long startDate, long l, int status);
+    List<TaskModel> getTasksByTimeRange(@Param("startTime") long startTime, @Param("endTime") long endTime,@Param("taskStatus") int status);
+
+    TaskModel getTasksByTimerIdUnix(@Param("timerId") Long timerId, @Param("runTimer") Long runTimer);
+
+    void update(TaskModel taskModel);
 }

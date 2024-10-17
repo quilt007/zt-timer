@@ -38,4 +38,33 @@
             </if>
         </where>
     </select>
+
+    <select id="getTasksByTimerIdUnix" resultType="world.ztomorrow.zttimer.dao.po.TaskModel" resultMap="taskMap">
+        select * from timer_task where timer_id = #{timerId} and run_timer = #{runTimer}
+    </select>
+
+    <update id="update">
+        update timer_task
+        <set>
+            <if test="taskModel.app != null">
+                `app` = #{taskModel.app},
+            </if>
+            <if test="taskModel.timerId != null">
+                `timer_id` = #{taskModel.timerId},
+            </if>
+            <if test="taskModel.output != null">
+                `output` = #{taskModel.output},
+            </if>
+            <if test="taskModel.runTimer != null">
+                `run_timer` = #{taskModel.runTimer},
+            </if>
+            <if test="taskModel.costTime != null">
+                `cost_time` = #{taskModel.costTime},
+            </if>
+            <if test="taskModel.status != null">
+                `status` = #{taskModel.status},
+            </if>
+        </set>
+        where task_id = #{taskModel.taskId};
+    </update>
 </mapper>

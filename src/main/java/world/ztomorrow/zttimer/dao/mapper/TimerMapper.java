@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import world.ztomorrow.zttimer.dao.po.TimerModel;
 
+import java.util.List;
+
 @Mapper
 public interface TimerMapper {
 
@@ -12,4 +14,8 @@ public interface TimerMapper {
     TimerModel selectById(@Param("timerId") Long timerId);
 
     void update(@Param("timerModel") TimerModel timerModel);
+
+    TimerModel getTimerById(@Param("timerModel") Long timerId);
+
+    List<TimerModel> getTimersByStatus(@Param("status") int status);
 }

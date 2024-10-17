@@ -30,4 +30,12 @@
         set status = #{timerModel.status}
         where timer_id = #{timerModel.timerId}
     </update>
+
+    <select id="getTimerById" resultMap="timer">
+        select * from xtimer where timer_id = #{timerId};
+    </select>
+
+    <select id="getTimersByStatus" resultMap="timer">
+        select * from xtimer where status = #{status};
+    </select>
 </mapper>

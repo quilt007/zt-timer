@@ -2,12 +2,14 @@ package world.ztomorrow.zttimer.dao.po;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import world.ztomorrow.zttimer.common.BaseModel;
 
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@ToString
 public class TaskModel extends BaseModel implements Serializable {
     private Integer taskId;
 

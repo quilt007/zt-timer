@@ -3,6 +3,7 @@ package world.ztomorrow.zttimer.utils;
 import cn.hutool.core.util.IdUtil;
 import org.quartz.CronExpression;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +19,12 @@ public class TimeUtils {
     public static String GetTimeBucketLockKey(LocalDateTime time , int bucketId) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return "time_bucket_lock:" + time.format(dateTimeFormatter) + "_"  + bucketId;
+    }
+
+    public static String GetMigratorLockKey(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH");
+        String dateStr = sdf.format(date);
+        return "migrator_lock_"+dateStr;
     }
 
     public static String GetTokenStr() {

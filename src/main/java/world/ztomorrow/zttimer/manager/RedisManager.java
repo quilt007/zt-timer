@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -27,6 +28,7 @@ public class RedisManager {
 
     private final StringRedisTemplate stringRedisTemplate;
     private final SchedulerAppConf schedulerAppConf;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public boolean lock(String key, String token, long expireSeconds) {
         // 首先查询锁是否属于自己
@@ -47,8 +49,8 @@ public class RedisManager {
     }
 
 
-    public void expireLock(String key, String token, int expireSeconds) {
-        Long execute = stringRedisTemplate.execute(getExpireLockScript(), Collections.singletonList(key), token, expireSeconds);
+    public void expireLock(String key, String token, long expireSeconds) {
+        Long execute  = redisTemplate.execute(getExpireLockScript(), Collections.singletonList(key), token, expireSeconds);
         if (execute.longValue() == 0) {
             log.info("延期{}失败:{}", key, execute);
         } else if (execute.longValue() == 1) {
@@ -101,7 +103,7 @@ public class RedisManager {
         int bucketsNum = schedulerAppConf.getBucketsNum();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String timeStr = sdf.format(new Date(taskModel.getRunTimer()));
-        long index = taskModel.getTaskId() % bucketsNum;
+        long index = taskModel.getTimerId() % bucketsNum;
         return timeStr + "_" + index;
     }
 

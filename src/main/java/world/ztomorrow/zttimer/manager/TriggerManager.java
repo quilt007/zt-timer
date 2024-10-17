@@ -1,9 +1,6 @@
 package world.ztomorrow.zttimer.manager;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import world.ztomorrow.zttimer.common.conf.TriggerAppConf;
 import world.ztomorrow.zttimer.dao.mapper.TaskMapper;
@@ -19,37 +16,42 @@ import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
 @Slf4j
-@Component
-@RequiredArgsConstructor
 public class TriggerManager extends TimerTask {
 
-    @Autowired
-    private RedisManager redisManager;
-    @Autowired
-    private TriggerPoolTask triggerPoolTask;
-    private TriggerAppConf triggerAppConf;
-    private TaskMapper taskMapper;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private CountDownLatch latch;
-    private String minuteBucketKey;
-    private int count = 0;
+    TriggerAppConf triggerAppConf;
 
-    public TriggerManager(TriggerAppConf triggerAppConf, TaskMapper taskMapper,
-                          LocalDateTime startTime, LocalDateTime endTime,
-                          CountDownLatch latch, String minuteBucketKey) {
+    TriggerPoolTask triggerPoolTask;
+
+    RedisManager redisManager;
+
+    TaskMapper taskMapper;
+
+    private final CountDownLatch latch ;
+    private Long count = 0L;
+
+    private final LocalDateTime startTime;
+
+    private final LocalDateTime endTime;
+
+    private final String minuteBucketKey;
+
+    public TriggerManager(TriggerAppConf triggerAppConf,TriggerPoolTask triggerPoolTask,
+                          RedisManager redisManager,TaskMapper taskMapper,CountDownLatch latch,
+                            LocalDateTime startTime, LocalDateTime endTime, String minuteBucketKey) {
         this.triggerAppConf = triggerAppConf;
+        this.triggerPoolTask = triggerPoolTask;
+        this.redisManager = redisManager;
         this.taskMapper = taskMapper;
+        this.latch = latch;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.latch = latch;
         this.minuteBucketKey = minuteBucketKey;
     }
 
     @Override
     public void run() {
         // 在开始时间与结束时间内，循环触发定时任务
-        LocalDateTime start = startTime.plusSeconds((long) count * triggerAppConf.getZrangeGapSeconds());
+        LocalDateTime start = startTime.plusSeconds( count * triggerAppConf.getZrangeGapSeconds());
         if (start.isAfter(endTime)) {
             latch.countDown();
             return;
@@ -76,7 +78,7 @@ public class TriggerManager extends TimerTask {
                 }
                 triggerPoolTask.runExecutor(task);
             } catch (Exception e) {
-                log.error("executor run task error,task" + task.toString());
+                log.error("executor run task error,task{}", task);
             }
         }
     }
